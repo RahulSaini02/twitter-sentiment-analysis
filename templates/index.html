@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href= "{{ url_for('static',filename='styles/index.css') }}" />
+    <link rel="icon" href="static/logo.webp" />
+    <title>Twitter Sentiment Analysis</title>
+    <script src="https://kit.fontawesome.com/6e1f482360.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <img class="logo" src="{{ url_for('static', filename='logo.webp')}}" alt="logo" />
+                <h2 class="logo-title">Twitter</h2>
+            </div>
+            <img class="banner" src="{{ url_for('static', filename='banner.png')}}" alt="banner" />
+        </div>
+        <div class="main-content">
+            <div class="about">
+                <h3>Twitter Sentiment Analysis</h3>
+                <br />
+                <p>This is a RoBERTa-base model trained on ~124M tweets from January 2018 to December 2021, and finetuned for sentiment
+                analysis with the TweetEval benchmark. The original Twitter-based RoBERTa model can be found here and the original
+                reference paper is TweetEval. This model is suitable for English.</p>
+                <br />
+                
+                <div class="labels">
+                    <a><i class="fas fa-tag"></i> Labels</a>
+                    <br />
+                    <p>Negative: 0 | Neutral: 1 | Positive: 2</p>
+                </div>
+                <div class="model-info">
+                    <h3><i class="fas fa-database"></i> Dataset used to train <a href ="https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest?text=Covid+cases+are+increasing+fast%21">cardiffnlp/twitter-roberta-base-sentiment-latest</a></h3>
+                    <div class="dataset">
+                        <a href="https://huggingface.co/datasets/tweet_eval"> <i class="fas fa-database"></i> tweet_eval</a>
+                        <br />
+                        <p>Size: 14.2MB | Number of Rows: 200, 785</p>
+                    </div>
+                    <div class="output">
+                        <a><i class="fas fa-outdent"></i> Sample Model Output</a>
+                        <pre class="prettyprint lang-json" style="padding: 10px;">
+                        [
+                            { "label": "negative", "score": 0.723 },
+                            { "label": "neutral", "score": 0.228 },
+                            { "label": "positive", "score": 0.047 }
+                        ]
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="computation">
+                <form class="search-form" action="" method="post">
+                    <div class="input-text">
+                        <label for="tweet-text"><i class="fas fa-paragraph"></i> Text Classification</label>
+                        <textarea class="textarea" placeholder="Paste here" rows="10" name="input_text">{{ input_text }}</textarea>
+                    </div>
+                    <input type="submit" value="Compute">
+                </form>
+                <div class="output {% if input_text == '' %}{{ 'hidden' }}{% else %} '' {% endif %}">
+                    {% for output in outputs %}
+                    <div class="scores">
+                        <div class="progress-bar" style="width: calc({{output.score}} * 100%)"></div>
+                        <div class="result">
+                            <p class="label"> <i class="fa-solid fa-square-poll-horizontal"></i> {{ output.label }}</p>
+                            <p class="score">{{ output.score }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
