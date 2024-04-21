@@ -34,3 +34,5 @@ def index():
         print(outputs[0])
   return render_template('index.html', input_text=input_text, outputs=outputs[0])
 
+if __name__ == '__main__':
+    app.run(debug=True)
